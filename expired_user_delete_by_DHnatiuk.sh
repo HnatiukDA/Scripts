@@ -17,7 +17,8 @@ for username in $(cut -d ':' -f1 /etc/passwd);
 do
     LAST_LOGIN=$(lastlog -u $username | awk 'NR==2{print $4, $5, $6}')
     # Check if user never login
-    if [[ $LAST_LOGIN == "**Never**" ]]; then
+    if [[ $(lastlog -u $username | awk 'NR==2{print}') == *"**Never"* ]]; then
+        echo -e "$username - Never loged in"
         continue
     fi
     LAST_LOGIN_TIMESTAMP=$(date -d "$LAST_LOGIN" +%s)
