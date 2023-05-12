@@ -18,11 +18,13 @@ do
     LAST_LOGIN=$(lastlog -u $username | awk 'NR==2{print $4, $5, $6}')
     # Check if user never login
     if [[ $(lastlog -u $username | awk 'NR==2{print}') == *"**Never"* ]]; then
-        echo -e "$username - Never loged in"
+        # echo -e "$username - Never loged in"
         continue
     fi
     LAST_LOGIN_TIMESTAMP=$(date -d "$LAST_LOGIN" +%s)
-
+    if [[ $LAST_LOGIN_TIMESTAMP = 0 ]]; then
+        continue
+    fi
     # Days since user last login
     DAYS_SINCE_LAST_LOGIN=$(((CURRENT_DATE - LAST_LOGIN_TIMESTAMP) / 86400))
 
